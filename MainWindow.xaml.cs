@@ -12,7 +12,6 @@ namespace ImageSlicer
     public partial class MainWindow : Window
     {
         private List<BitmapSource> Result;
-        private int ResultImageScale;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,7 +26,7 @@ namespace ImageSlicer
                 Slicer slicer = new Slicer();
                 slicer.OnException += ShowExceptionMessage;
                 var image = new BitmapImage(new Uri(fileDialog.FileName));
-                Result = slicer.Slice(image, ResultImageScale);
+                Result = slicer.Slice(image, int.Parse(ResultImagesScaleText.Text),int.Parse(MarginXTextBox.Text),int.Parse(MarginYTextBox.Text));
                 MessageTextBlock.Text = $"Opened file:{fileDialog.FileName}";
             }
 
@@ -66,11 +65,6 @@ namespace ImageSlicer
         private void ShowExceptionMessage(Exception ex)
         {
             MessageBox.Show($"{ex.Message}\n{ex.StackTrace}", "Oh, there is an error!", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        private void ResultImagesScaleText_TextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            ResultImageScale = int.Parse(ResultImagesScaleText.Text);
         }
     }
 }

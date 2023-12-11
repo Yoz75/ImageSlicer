@@ -6,7 +6,7 @@ namespace ImageSlicer
     internal class Slicer
     {
         public Action<Exception> OnException;
-        public List<BitmapSource> Slice(BitmapSource sourceImage, int onePartScale)
+        public List<BitmapSource> Slice(BitmapSource sourceImage, int onePartScale, int xMargin, int yMargin)
         {
             try
             {
@@ -19,7 +19,22 @@ namespace ImageSlicer
                 {
                     for (int x = 0; x < widthCount; x++)
                     {
-                        imagePart = new CroppedBitmap(sourceImage, new Int32Rect(x * onePartScale, y * onePartScale, onePartScale, onePartScale));
+                        if (x != 0 && y != 0)
+                        {
+                            imagePart = new CroppedBitmap(sourceImage, new Int32Rect(x * onePartScale + xMargin, y * onePartScale + yMargin, onePartScale, onePartScale));
+                        }
+                        else if (x == 0 && y != 0)
+                        {
+                            imagePart = new CroppedBitmap(sourceImage, new Int32Rect(x * onePartScale, y * onePartScale + yMargin, onePartScale, onePartScale));
+                        }
+                        else if (x != 0 && y == 0)
+                        {
+                            imagePart = new CroppedBitmap(sourceImage, new Int32Rect(x * onePartScale + xMargin, y * onePartScale, onePartScale, onePartScale));
+                        }
+                        else
+                        {
+                            imagePart = new CroppedBitmap(sourceImage, new Int32Rect(x * onePartScale, y * onePartScale, onePartScale, onePartScale));
+                        }
                         result.Add(imagePart);
                     }
                 }
